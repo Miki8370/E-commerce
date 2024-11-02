@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+
 from pathlib import Path
 from datetime import timedelta
 #from allauth.socialaccount.internal import jwtkit
@@ -60,17 +61,12 @@ INSTALLED_APPS = [
 
     #local apps
     'shop.apps.ShopConfig',
+    'user_design',
+    'custom_product',
+    
 
 ]
-"""
 
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Shemane API Project",
-    "DESCRIPTION": "A sample blog to learn about DRF",
-    "VERSION": "1.0.0",
-    # OTHER SETTINGS
-}
-"""
 SITE_ID = 1  # new
 
 REST_FRAMEWORK = {
@@ -108,7 +104,7 @@ DJRESTAUTH_TOKEN_MODEL = None # Use JWT instead of the default token model
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",#
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -117,10 +113,14 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     
 ]
-CORS_ORIGIN_WHITELIST = (
-    "http://localhost:3000",
+
+CORS_ORIGIN_ALLOW_ALL = True
+"""
+CORS_ALLOWED_ORIGINS = [ #A list of origins that are authorized to make cross-site HTTP requests.
+    "http://localhost:5173",
     "http://localhost:8000",
-)
+]
+"""
 
 
 ROOT_URLCONF = 'backend.urls'

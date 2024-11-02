@@ -5,8 +5,15 @@ from django.contrib.auth.models import User
 """
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    
+
+class Catagory(models.Model):
+    catagory_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.catagory_name
+
 """
+
 class Products(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -17,6 +24,12 @@ class Products(models.Model):
     is_customizable = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
+    #catagory = models.ForeignKey(Catagory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    
 
 class Design(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
@@ -25,8 +38,10 @@ class Design(models.Model):
     is_approved = models.BooleanField(default=False)  # For admin to approve if needed
     date_created = models.DateTimeField(auto_now_add=True)
 
+
+
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='shop_orders')
     items = models.ManyToManyField('CartItem')
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
