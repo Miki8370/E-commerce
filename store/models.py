@@ -1,4 +1,3 @@
-"""
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -42,24 +41,3 @@ class Design(models.Model):
     def __str__(self):
         return f"{self.user.username}'s design on {self.product.name}"
 
-
-
-
-class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='shop_orders')
-    items = models.ManyToManyField('CartItem')
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-class CartItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    design = models.ForeignKey(Design, on_delete=models.SET_NULL, null=True, blank=True)
-
-class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    shipping_address = models.TextField()
-    status = models.CharField(max_length=50, choices=[('pending', 'Pending'), ('shipped', 'Shipped'), ('delivered', 'Delivered')])
-    date_ordered = models.DateTimeField(auto_now_add=True)
-
-"""

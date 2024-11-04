@@ -1,3 +1,6 @@
+"""
+
+
 from django.shortcuts import render
 from . import serializers
 from rest_framework import permissions
@@ -26,18 +29,12 @@ class ProductView(APIView):
         return Response(output)
     
     
-    """def post(self, request):
 
-        serializer = serializer.ProductSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)"""
-    
 
 class ProductSerializerView(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = serializers.ProductSerializer
-    queryset = models.Products.objects.all()
+    queryset = models.Product.objects.all()
 
 
 class DesignView(APIView):
@@ -84,3 +81,5 @@ class OrderSerializerView(generics.ListAPIView):
 
 
 
+
+"""

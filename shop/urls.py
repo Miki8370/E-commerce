@@ -1,11 +1,8 @@
+"""
 from django.urls import path, include
 from . import views
 #from rest_framework.routers import DefaultRouter
-"""
-router = DefaultRouter()
-router.register(r'product', views.ProductSerializerView)
 
-"""
 urlpatterns = [
     path('product_/', views.ProductView.as_view(), name="product2"),
     path('design_/', views.DesignView.as_view(), name="design2"),
@@ -18,3 +15,4 @@ urlpatterns = [
 
 
 ]
+"""

@@ -1,3 +1,4 @@
+"""
 from rest_framework import serializers
 from . import models
 
@@ -18,7 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
         'created_by',
         'date_added',
         ]
-        model = models.Products
+        model = models.Product
 
 
 class DesignSerializer(serializers.ModelSerializer):
@@ -65,4 +66,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         model = models.Order
 
+
+
+"""
 
