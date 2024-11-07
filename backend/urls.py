@@ -10,6 +10,7 @@ urlpatterns = [
     #path('api/v1/', include('shop.urls')),
     path('api/v2/', include('user_design.urls')),
     path('api/v3/', include('custom_product.urls')),
+    path('api/v4/', include('store.urls')),
     # path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),  # No namespace here
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),  # No namespace here

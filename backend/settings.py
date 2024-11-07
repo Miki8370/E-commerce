@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'django_filters',
    
     #allauth 3rd party
     'allauth',
@@ -53,6 +54,8 @@ INSTALLED_APPS = [
     'user_design',
     'custom_product',
     'store',
+    'shope',
+    
     
     
 
