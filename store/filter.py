@@ -3,6 +3,8 @@ from store.models import Product
 
 
 class ProductFilter(FilterSet):
-    class Meta:
+    class Meta: #used to filter product model with catagory, and name
         model = Product
         fields = ['category', 'name']
+
+

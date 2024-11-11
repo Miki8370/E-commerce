@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
+import uuid
 
 class Color(models.Model):
     name = models.CharField(max_length=50)
@@ -25,8 +27,8 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Custom-made product price
     image = models.ImageField(upload_to='products/')
-    available_sizes = models.ManyToManyField(Size, blank=True)
-    available_colors = models.ManyToManyField(Color, blank=True)
+    available_sizes = models.ForeignKey(Size, on_delete=models.CASCADE, null=True, blank=True, default=1)
+    available_colors = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True, default=1)
     is_customizable = models.BooleanField(default=False)  # Only for products that can be customized
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -35,8 +37,18 @@ class Product(models.Model):
     # Fixed price for all user-designed products
     price = models.DecimalField(max_digits=10, decimal_places=2, default=29.99)  # Fixed, non-editable
 
+    class Meta:
+        ordering = ['-date_added']
+
+        indexes = [
+            models.Index(fields=['-date_added'])
+        ]
+
+        #this Meta class making new products to be added in front or ascending order now every new product is added in the top. 
+
+
     def __str__(self):
-        return self.description
+        return self.name
 
 
 class UserDesign(models.Model):
@@ -45,8 +57,15 @@ class UserDesign(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
     #product_image = models.ImageField(upload_to='designs/')
     shipping_address = models.TextField()
-    crated_at = models.DateField(auto_now_add=True)
-    
+    crated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['crated_at']
+
+        indexes = [
+            models.Index(fields=['crated_at'])
+        ]
+    #same logic goes in but the opposite way since this one is custom_user model.
 
     def __str__(self):
         
@@ -54,26 +73,29 @@ class UserDesign(models.Model):
 
 
 
-class CartItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    user_design = models.ForeignKey(UserDesign, on_delete=models.CASCADE)
 
-    def get_total_price(self):
-        return self.quantity * self.product.price
 
 # Cart model linked to the user
 class Cart(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    items = models.ManyToManyField(CartItem)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    #items = models.ManyToManyField(CartItem)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def get_cart_total(self):
-        return sum(item.get_total_price() for item in self.items.all())
+    def __str__(self):
+        return str(self.id)
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE, null=True, blank=True) #items works as a link between cart and cartitem model.
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, related_name='cartitems')
+    quantity = models.PositiveIntegerField(default=0)
+    #user_design = models.ForeignKey(UserDesign, on_delete=models.CASCADE, null=True, blank=True)
 
 # Order model
 class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(CartItem)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     STATUS_CHOICES = [
@@ -84,5 +106,10 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     payment_details = models.TextField()  # Could be expanded to more detailed fields
 
-    def get_order_total(self):
-        return self.cart.get_cart_total()
+    
+    def calculate_total_amount(self):
+        return sum(item.get_total_price() for item in self.items.all())
+
+
+
+
