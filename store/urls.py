@@ -12,6 +12,7 @@ router.register('carts', CartView, basename='cart')
 router.register('user_design', UserDesignView, basename='user_design')
 router.register('catagory', CartView, basename='catagory')
 router.register('UD_production', UDProductionView, basename='ud_productions')
+router.register('orders', OrderView, basename='order')
 
 
 cart_router = NestedDefaultRouter(router, 'carts', lookup='cart')
