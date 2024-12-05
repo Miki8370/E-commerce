@@ -8,7 +8,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 
-
 admin.site.register(Color)
 admin.site.register(Size)
 admin.site.register(UserDesign)

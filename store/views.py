@@ -39,17 +39,6 @@ class UDProductionView(ModelViewSet):
         serializer = UserDesignSerializer(product, many=True)
         return Response(serializer.data)
 
-"""
-class UDProductDeatailView(ModelViewSet):
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request, pk):
-        product = get_object_or_404(UserDesign, id=pk)
-        serializer = UserDesignSerializer(product)
-
-        return Response(serializer.data)
-"""
-
 
 
 
@@ -61,34 +50,10 @@ class ProductView(ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = ProductFilter
-    search_fields = ['name', 'description']
+    search_fields = ['name', 'description', 'catagory']
     pagination_class = pagination.PageNumberPagination #allow us to crate PageNumberPagination.
     
 
-"""
-def get(self, request):
-        
-        product = Product.objects.all()
-        serializer = ProductSerializer(product, many=True)
-        return Response(serializer.data)
-
-
-
-class ProductDetailView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request, pk):
-        #product = Product.objects.get(id=pk)
-        product = get_object_or_404(Product, id=pk) #get_object_or_404 is used to show proper error massage
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
-"""
-    
-    
-
-
-    
-    
 class CatagoryView(ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
@@ -98,32 +63,11 @@ class CatagoryView(ModelViewSet):
         return Response(serializer.data)
 
 
-"""
-class CatgoryDetailView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-
-    def get(self, request, pk):
-        catagory = get_object_or_404(Catagory, id=pk)
-        serializer = CatagorySerializer(catagory)
-        return Response(serializer.data)
-"""
-
-
 
 class CartView(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
-"""
-class CartDetailView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request, pk):
-        cart = get_object_or_404(Cart, id=pk)
-        serializers = CartSerializer(cart)
-        return Response(serializers.data)
-"""
 
     
 class CartItemView(ModelViewSet):
@@ -147,6 +91,7 @@ class CartItemView(ModelViewSet):
     
 
 class OrderView(ModelViewSet):
+    permission_classes = [permissions.AllowAny]
     http_method_names = ["get", "patch", "post", "delete", "options", "head"]
     
     def get_permissions(self):

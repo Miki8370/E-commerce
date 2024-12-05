@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     'custom_product',
     'store',
     'shope',
+    'MockStore',
+    'cart',
+
     
     
     
@@ -200,3 +203,4 @@ REST_FRAMEWORK = {
     
 }
 
+CART_SESSION_ID = 'cart'
