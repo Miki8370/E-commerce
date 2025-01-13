@@ -1,12 +1,33 @@
 from rest_framework import serializers
 from . models import *
 from django.db import transaction
+from django.contrib.auth.models import User
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username']
+
+class UserDesignSer(serializers.ModelSerializer):
+    class Meta:
+        model = UserDesign
+        fields = '__all__'
+        read_only_fields = ['user']
+
+    def validate(self, attrs):
+        attrs['user'] = self.context['request'].user
+        return attrs #This function returns the user that sent the request
 
 class UserDesignSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
-        fields = '__all__'
+        fields = ['Size', 'color','shipping_address', 'user']
         model = UserDesign
+        
+class UserDesignForAdmin(serializers.ModelSerializer):
+    class Meta:
+        model = UserDesign
+        fields = "__all__"
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -35,12 +56,18 @@ class ProductSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField()
     
 
+class ProducctCustemizeSer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['available_sizes', 'available_colors']
+
 
 
 class CartProductListSerializer(serializers.ModelSerializer):#created to only small data for my cart api
     class Meta:
         model = Product
         fields = ['id', 'name', 'price']
+    
 
 
 

@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404
-from . serializers import *
-from . models import *
+from .serializers import *
+from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework import generics, status
-from . filter import *
+from .filter import *
 from rest_framework import pagination #to work with pagination
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
@@ -15,13 +15,22 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyM
 
 # Create your views here.
 
+
+class AllDesignAdminView(ModelViewSet):
+    permission_classes = [permissions.IsAdminUser]
+    serializer_class =  UserDesignForAdmin
+    queryset = UserDesign.objects.all()
+    http_method_names = ['get']
+
 class UserDesignView(ModelViewSet):
     permission_classes = [permissions.AllowAny]
-    serializer_class = UserDesignSerializer
+    serializer_class = UserDesignSer
+    queryset = UserDesign.objects.all()
+    http_method_names = ['post']
 
     
     def post(self, request):
-        serializer = UserDesignSerializer(data=request.data)
+        serializer = UserDesignSer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
@@ -30,15 +39,14 @@ class UserDesignView(ModelViewSet):
 
 class UDProductionView(ModelViewSet):
     #Api view used to display orderd designs for admins
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserDesignSerializer
+    queryset = UserDesign.objects.all()
+    http_method_names = ['get']
 
-
-    def get(self, request):
-        product = UserDesign.objects.all()
-        serializer = UserDesignSerializer(product, many=True)
-        return Response(serializer.data)
-
+    def get_queryset(self):
+        
+        return UserDesign.objects.filter(user=self.request.user)
 
 
 
@@ -46,22 +54,26 @@ class ProductView(ModelViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    http_method_names = ['get', 'patch']
+    http_method_names = ['get', 'put']
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = ProductFilter
     search_fields = ['name', 'description', 'catagory']
     pagination_class = pagination.PageNumberPagination #allow us to crate PageNumberPagination.
+
+    def put(self, request):
+        serializer = ProducctCustemizeSer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            return Response(serializer.data)
     
 
 class CatagoryView(ModelViewSet):
     permission_classes = [permissions.AllowAny]
-
-    def get(self, request):
-        catagory = Catagory.objects.all()
-        serializer = CatagorySerializer(catagory, many=True)
-        return Response(serializer.data)
-
+    queryset = Catagory.objects.all()
+    serializer_class = CatagorySerializer
+    http_method_names = ['get']
 
 
 class CartView(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
