@@ -10,14 +10,14 @@ urlpatterns = [
     #path('api/v1/', include('shop.urls')),
     path('api/v2/', include('user_design.urls')),
     path('api/v3/', include('custom_product.urls')),
-    path('api/', include('store.urls')),
+    path('api/store/', include('store.urls')),
     path('api-auth/', include('rest_framework.urls')),#home log
     path('auth/', include('dj_rest_auth.urls')),  # No namespace here
     path("auth/registration/", include("dj_rest_auth.registration.urls")),  # No namespace here
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('accounts/', include('allauth.urls')),
-    path('mock', include('MockStore.urls')),
+    path('api/', include('api.urls')),
     
 
 

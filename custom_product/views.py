@@ -5,16 +5,15 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from rest_framework.viewsets import ModelViewSet
 
 # Create your views here.
 
 
-class CustomProductView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-
-    def get(self, request):
-        product = CustomMadeProducts.objects.all()
-        serializer = CustomProductSerializer(product, many=True)
-        return Response(serializer.data)
     
+
+class CustomProductsView(ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CustomProductSerializer
+    queryset = CustomMadeProducts.objects.all()
+    http_method_names = ['get']

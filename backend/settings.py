@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     "dj_rest_auth.registration",
-    'user',
    # 'allauth.socialaccount.providers.google',
 
    #simple jwt
@@ -54,7 +53,7 @@ INSTALLED_APPS = [
     'user_design',
     'custom_product',
     'store',
-    'MockStore',
+    'api',
 
     
     
