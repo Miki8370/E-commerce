@@ -12,7 +12,7 @@ class UserDesignSer(serializers.ModelSerializer):
     class Meta:
         model = UserDesign
         fields = '__all__'
-        read_only_fields = ['user']
+        #read_only_fields = ['user']
 
     def validate(self, attrs):
         attrs['user'] = self.context['request'].user

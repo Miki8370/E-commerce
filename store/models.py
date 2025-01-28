@@ -89,7 +89,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE, null=True, blank=True) #items works as a link between cart and cartitem model.
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, related_name='cartitems')
     quantity = models.PositiveIntegerField(default=0)
-    #user_design = models.ForeignKey(UserDesign, on_delete=models.CASCADE, null=True, blank=True)
+    #user_design = models.ForeignKey(UserDesigns, on_delete=models.CASCADE, null=True, blank=True)
 
 # Order model
 class Order(models.Model):

@@ -23,7 +23,7 @@ class AllDesignAdminView(ModelViewSet):
     http_method_names = ['get']
 
 class UserDesignView(ModelViewSet):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserDesignSer
     queryset = UserDesign.objects.all()
     http_method_names = ['post']

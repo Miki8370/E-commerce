@@ -8,10 +8,10 @@ from rest_framework_nested.routers import NestedDefaultRouter
 router = DefaultRouter()
 
 #custom_product urls
-router.register('c-products', CustomProductsView, basename='c-products')
+router.register('custom-made-products', CustomProductsView, basename='c-products')
 
 #store urls
-router.register('products', ProductView, basename='products')
+router.register('user-made-products', ProductView, basename='products')
 router.register('add-designs', UserDesignView, basename='user_design')
 router.register('catagory', CatagoryView, basename='catagory')
 router.register('view-designs', UDProductionView, basename='ud_productions')
